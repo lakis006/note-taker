@@ -18,11 +18,9 @@ app.get("/notes", function (req, res) {
     res.sendFile(path.join(_dirname, "public/notes.html"));
 });
 
-const noteData = [];
-
 // when the data is collected it will end up as db.json here
 
-app.get("/notes", function (req, res) {
+app.get("/api/notes", function (req, res) {
     res.sendFile(path.join(__dirname, "db/db.json"));
 });
 
@@ -31,12 +29,18 @@ app.get("/notes", function (req, res) {
 
 app.post("/api/notes", function (req, res) {
     let newNote = req.body;
-    
+    let fileLocation = path.join(_dirname, "db/db.json");
     //adds the new note
     fs.readFile("db/db.json", "utf8", function (err, input) {
         if (err) throw err;
-
-
+        let currentData = JSON.parse(data);
+        newNote.id = currentData.length + newNote.title;
+        currentData.push(newNote);
+        let enhance = JSON.stringify(currentData);
+        fs.writeFile(fileLocation, enhance, function(err) {
+            if (err) throw err;
+        });
+        res.sendFile(path.join(_dirname, "public/notes.html"));
     })
 
     
