@@ -25,7 +25,7 @@ app.get("/notes", function (req, res) {
 
 // when the data is collected it will end up as db.json here
 
-app.get("/api/notes", async (req, res) {
+app.get("/api/notes", async (req, res) => {
     try {
         return res.json(JSON.parse(await readAsync(path.join(_dirname, "/db/db.json"), "utf8")));
     } catch (err) {
@@ -36,7 +36,7 @@ app.get("/api/notes", async (req, res) {
 
 // use POST method to add a note
 
-app.post("/api/notes", async (req, res) {
+app.post("/api/notes", async (req, res) => {
    try {
        let newNote = JSON.parse(JSON.stringify(req.body));
        newNote.id = uuidv4();
