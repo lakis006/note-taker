@@ -33,7 +33,7 @@ app.post("/api/notes", function (req, res) {
     //adds the new note
     fs.readFile("db/db.json", "utf8", function (err, input) {
         if (err) throw err;
-        let currentData = JSON.parse(data);
+        let currentData = JSON.parse(input);
         newNote.id = currentData.length + newNote.title;
         currentData.push(newNote);
         let enhance = JSON.stringify(currentData);
@@ -48,7 +48,26 @@ app.post("/api/notes", function (req, res) {
 })
 
 // use DELETE method to be able to delete note 
+app.delete("/api/notes/:id", function (req,res) {
+    let directory = req.params.id;
+    let fileLocation = path.join(_dirname, "db.db.json");
 
+
+    fs.readFile(fileLocation, 'utf8', function (err, data) {
+        if (err) throw err;
+        let currentData = JSON.parse(input);
+        for (let i = 0; i < currentData.length; i++) {
+            if (currentData[i].id === directory) {
+                currentData.splice(i, 1);
+            }
+        }
+        let enhance = JSON.stringify(currentData);
+        fs.writeFile(fileLocation, enhance, function(err) {
+            if (err) throw err;
+        });
+    });
+    res.sendfile(path.join(_dirname, "public/notes.html"));
+});
 
 
 //render everything on the main page
