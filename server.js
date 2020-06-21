@@ -4,7 +4,7 @@ const path = require("path");
 
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 
 
 app.use(express.urlencoded({ extended: true}));
@@ -44,7 +44,7 @@ app.post("/api/notes", function (req, res) {
             storedInfo[i].id = parseInt([i]) + 1;
         }
 
-        fs.writeFile("db.db.json", JSON.stringify(storedInfo), function(err) {
+        fs.writeFile("db/db.json", JSON.stringify(storedInfo), function(err) {
             if (err) throw err;
         });
         res.json(true);
@@ -57,7 +57,7 @@ app.delete("/api/notes/:id", function (req,res) {
    
 
 
-    fs.readFile("db.db.json", 'utf8', function (err, input) {
+    fs.readFile("db/db.json", 'utf8', function (err, input) {
         if (err) throw err;
         storedInfo = JSON.parse(input);
         storedInfo.splice(deleteDirectory - 1, 1);
@@ -67,7 +67,7 @@ app.delete("/api/notes/:id", function (req,res) {
         }
 
     
-        fs.writeFile("db.db.json", JSON.stringify(storedInfo), function(err) {
+        fs.writeFile("db/db.json", JSON.stringify(storedInfo), function(err) {
             if (err) throw err;
         });
     });
