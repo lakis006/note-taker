@@ -6,7 +6,7 @@ const path = require("path");
 
 
 const app = express();
-const PORT = process.env.PORT || 7000;
+const PORT = process.env.PORT || 9000;
 
 
 app.use(express.urlencoded({ extended: true}));
@@ -42,7 +42,7 @@ app.post("/api/notes", async (req, res) => {
         fs.writeFile(newLocation, update, function (err) {
             if (err) throw err;
         });
-        res.sendFile(path.join(_dirname, "public/notes.html"));
+        res.sendFile(path.join(__dirname, "public/notes.html"));
     });
 });
 
