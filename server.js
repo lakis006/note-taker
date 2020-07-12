@@ -8,14 +8,14 @@ const writeAsync = util.promisify(fs.writeFile);
 
 
 const app = express();
-const PORT = process.env.PORT || 9000;
+const PORT = process.env.PORT || 5000;
 
 
 app.use(express.urlencoded({ extended: true}));
 app.use(express.json());
 app.use(express.static('public'));
 
-let storedInfo = [];
+// let storedInfo = [];
 
 //the routes that will render notes 
 
@@ -25,47 +25,32 @@ app.get("/notes", function (req, res) {
 
 // when the data is collected it will end up as db.json here
 
-app.get("/api/notes", async (req, res) => {
-    try {
-        return res.json(JSON.parse(await readAsync(path.join(_dirname, "/db/db.json"), "utf8")));
-    } catch (err) {
-        console.log(err);
-    }
+app.get("/api/notes", function (req, res) {
+    res.sendFile(path.join(_dirname, "db/db.json"))
 });
 
 
 // use POST method to add a note
 
 app.post("/api/notes", async (req, res) => {
-   try {
-       let newNote = JSON.parse(JSON.stringify(req.body));
-       newNote.id = uuidv4();
-       console.log(newNote);
-
-       let newArray = JSON.parse(await readAsync(path.join(_dirname, "/db/db.json"), "utf-8"));
-       newArray.push(newNote);
-       await writeAsync(path.join(_dirname, "/db/db.json"), JSON.stringify(newArray));
-
-       return res.json(newNote);
-   } catch (err) {
-       console.log(err);
-   }
+    let newNote = req.body;
+    let dbLocation = path.join(_dirname, "db/db.json");
+    fs.readFile(dbLocation, "utf8", function (err, data) {
+        if (err) throw err;
+        let oldData = JSON.parse(data);
+        newNote.id = oldData.length + newNote.title;
+        oldData.push(newNote);
+        let update = JSON.stringify(oldData);
+        fs.writeFile(dbLocation, update, function (err) {
+            if (err) throw err;
+        });
+        res.sendFile(path.join(_dirname, "public/notes.html"));
+    });
 });
 
 // use DELETE method to be able to delete note 
 app.delete("api/notes/:id", function (req,res) {
-   console.log("It deletes!!");
-   let newDelete = req.params.id;
-   let newData = fs.readFileSync(path.join(_dirname, "/db/db.json"), 'utf-8');
-    let newArray = JSON.parse(newData);
-    for (note of newArray) {
-        if (note.id == newDelete) {
-            newArray.pop(note);
-            fs.writeFileSync(path.join(_dirname, "/db/db.json"), JSON.stringify(newArray));
-        }
-    }
-
-    res.json({message: "File Deleted"})
+    let noteIndex = re
 });
 
 
