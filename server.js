@@ -1,10 +1,8 @@
 const fs = require("fs");
 const express = require("express");
 const path = require("path");
-const { v4: uuidv4 } = require('uuid');
-const util = require('util');
-const readAsync = util.promisify(fs.readFile);
-const writeAsync = util.promisify(fs.writeFile);
+
+
 
 
 const app = express();
@@ -34,14 +32,14 @@ app.get("/api/notes", function (req, res) {
 
 app.post("/api/notes", async (req, res) => {
     let newNote = req.body;
-    let dbLocation = path.join(_dirname, "db/db.json");
-    fs.readFile(dbLocation, "utf8", function (err, data) {
+    let newLocation = path.join(_dirname, "db/db.json");
+    fs.readFile(newLocation, "utf8", function (err, data) {
         if (err) throw err;
         let oldData = JSON.parse(data);
         newNote.id = oldData.length + newNote.title;
         oldData.push(newNote);
         let update = JSON.stringify(oldData);
-        fs.writeFile(dbLocation, update, function (err) {
+        fs.writeFile(newLocation, update, function (err) {
             if (err) throw err;
         });
         res.sendFile(path.join(_dirname, "public/notes.html"));
@@ -50,7 +48,17 @@ app.post("/api/notes", async (req, res) => {
 
 // use DELETE method to be able to delete note 
 app.delete("api/notes/:id", function (req,res) {
-    let noteIndex = re
+    let noteIndex = req.params.id;
+    let newLocation = path.join(_dirname, "db/db.json");
+    fs.readFile(newLocation, "utf8", function (err, data) {
+        if (err) throw err;
+        let oldData = JSON.parse(data);
+        for (let i = 0; i < oldData.length; i++) {
+            if (oldData[i].id === noteIndex) {
+                oldData.splice(i, 1);
+            }
+        };
+    });
 });
 
 
@@ -60,7 +68,6 @@ app.get("*", function (req, res) {
     res.sendfile(path.join(_dirname, "public/index.html"));
 });
 
-//This is where the server will commence 
 app.listen(PORT, function() {
-    console.log("App listening on PORT: ", PORT);
+    console.log("App listening on PORT: ", (PORT));
 });
