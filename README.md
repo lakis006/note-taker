@@ -1,1 +1,7 @@
-# note-taker
+# The Note-Taker
+
+## Description
+
+## Deployment 
+
+## Screenshot 
