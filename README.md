@@ -32,3 +32,7 @@ node server.js
 * You may also navigate to the live app deployed on [Heroku here](https://note-taker-lakis006.herokuapp.com/) and get started! Saved notes will render to the left of the screen. You may view saved notes by simply clicking on them. 
 
 ## Screenshots
+
+* ![image](public/assets/images/start.png)
+
+* ![image](public/assets/images/note-list.png)
