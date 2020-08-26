@@ -51,7 +51,7 @@ app.post("/api/notes", function (req, res) {
 app.delete("/api/notes/:id", function (req,res) {
     let newNote = req.params.id;
     console.log(newNote);
-    let newLocation = path.join(__dirname, "db/db.json", 'utf-8');
+    let newLocation = path.join(__dirname, "db/db.json");
     fs.readFile(newLocation, "utf8", function (err, data) {
         if (err) throw err;
         dbFile.splice(newNote.id, 1);
